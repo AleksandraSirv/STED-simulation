@@ -119,6 +119,8 @@ Output files are saved automatically in the working directory as:
 
 Moreover, the estimated effective PSF resolution calculated using **_fwhm()_** is printed to the console for quantitative evaluation.
 
+**Note:** Running the simulation again will overwrite existing output images. To preserve previous results, rename or move them before re-running.  
+
 ---
 ## Example Output
 
