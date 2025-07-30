@@ -13,11 +13,11 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)] %(message)s",
     handlers=[
-        logging.FileHandler("log.txt")
+        logging.FileHandler("Output/log.txt")
         logging.StreamHandler()
     ]
 )
-logger=logging.getLogger(__name__),
+logger=logging.getLogger(__name__)
 logger.info("Information message")
 #-----------------------------------------------------------------------------
 #INITIALIZATION OF PARAMETERS
