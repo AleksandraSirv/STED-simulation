@@ -14,10 +14,10 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)] %(message)s",
     handlers=[
         logging.FileHandler("log.txt")
-        logging.StramHandler()
+        logging.StreamHandler()
     ]
 )
-logger=logging.getLogger(_name_)
+logger=logging.getLogger(__name__),
 logger.info("Information message")
 #-----------------------------------------------------------------------------
 #INITIALIZATION OF PARAMETERS
