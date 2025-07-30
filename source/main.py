@@ -61,8 +61,8 @@ else:
     w_exc = diffraction_limit(lambda_exc, NA)  # Excitation beam waist (nm)
     w_sted = diffraction_limit(lambda_sted, NA)  # STED beam waist (nm)
 
-    print(f"Excitation Beam Waist (w0) = {w_exc:.2f} nm")
-    print(f"STED Beam Waist (w0) = {w_sted:.2f} nm")
+    logger.info(f"Excitation Beam Waist (w0) = {w_exc:.2f} nm")
+    logger.info(f"STED Beam Waist (w0) = {w_sted:.2f} nm")
 
     # Generate PSFs
     exc_psf = gaussian_psf(x, y, w_exc)
