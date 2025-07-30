@@ -9,6 +9,11 @@ from visual import plot_results
 #-----------------------------------------------------------------------------
 #SETTING UP LOGGING
 #-----------------------------------------------------------------------------
+try:  os.makedirs("Output")
+    except FileExistsError:
+    # directory already exists
+pass
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)] %(message)s",
@@ -84,10 +89,6 @@ else:
     # Calculate the Full Width at Half Maximum (FWHM) for Comparison
     fwhm_exc = fwhm(exc_psf)  # FWHM of excitation PSF
     fwhm_eff = fwhm(eff_psf)  # FWHM of effective PSF (after STED)
-    try:  os.makedirs("Output")
-    except FileExistsError:
-        # directory already exists
-        pass
         
     logger.info(f"Abbe Diffraction Limit: {abbe_resolution:.2f} nm")
     logger.info(f"Excitation Beam FWHM: {fwhm_exc:.2f} nm")
