@@ -1,11 +1,24 @@
 #Including libraries
 import numpy as np
 import os
+import logging
 from start import read_config_file
 from psf_functions import gaussian_psf, laguerre_gaussian_donut, effective_psf
 from resolution_functions import fwhm, diffraction_limit
 from visual import plot_results
-
+#-----------------------------------------------------------------------------
+#SETTING UP LOGGING
+#-----------------------------------------------------------------------------
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)] %(message)s",
+    handlers=[
+        logging.FileHandler("log.txt")
+        logging.StramHandler()
+    ]
+)
+logger=logging.getLogger(_name_)
+logger.info("Information message")
 #-----------------------------------------------------------------------------
 #INITIALIZATION OF PARAMETERS
 #-----------------------------------------------------------------------------
@@ -75,10 +88,10 @@ else:
     except FileExistsError:
         # directory already exists
         pass
-    print("")
-    print(f"Abbe Diffraction Limit: {abbe_resolution:.2f} nm")
-    print(f"Excitation Beam FWHM: {fwhm_exc:.2f} nm")
-    print(f"Effective FWHM (after STED): {fwhm_eff:.2f} nm")
+        
+    logger.info(f"Abbe Diffraction Limit: {abbe_resolution:.2f} nm")
+    logger.info(f"Excitation Beam FWHM: {fwhm_exc:.2f} nm")
+    logger.info(f"Effective FWHM (after STED): {fwhm_eff:.2f} nm")
 
     # ------------------------------------------------------------------------
     # PLOTTING RESULTS
