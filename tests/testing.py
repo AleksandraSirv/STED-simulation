@@ -200,3 +200,46 @@ def test_fwhm_return():
     assert result > 0, "FWHM must be positive"
     assert result < N, "FWHM should be smaller than grid size"
     
+def test_gaussian_psf_peak_and_symmetry():
+    """ 
+    Test for cheking that the 2D Gaussian PSF peaks at the center and is symmetric across 
+    the x-axis.
+    """
+    w0 = 100  # Beam waist in [nm]
+    xy = np.linspace(-500, 500, 1001)
+    x, y = np.meshgrid(xy, xy)
+    psf = gaussian_psf(x, y, w0)
+
+    center = psf[500, 500]
+    left = psf[500, 400]
+    right = psf[500, 600]
+
+    #Check wether the peak is at the center
+    assert np.isclose(center,1.0), #Peak should be 1 at the center
+    #Check symmetry
+    assert np.isclose(left,rigth, rtol=1e-3) #Should be symmetric in x
+
+def test_laguerre_psf_peak():
+    """ 
+    Test for cheking that the Laguerre-Gaussian (donut) PSF has zero intensity at the center 
+    (dark spot) and nonzero intensity in a surrounding ring, confirming correct donut shape.
+    """
+    w = 100  # Beam waist in [nm]
+    xy = np.linspace(-500, 500, 1001)
+    x, y = np.meshgrid(xy, xy)
+    psf = gaussian_psf(x, y, w)
+
+    center = psf[500, 500]
+    ring = psf[500, 400] #Has to be more than 0
+
+    #Check wether the peak is 0
+    assert np.isclose(center,0, atol=1e-6), #Peak should be 0 at the center
+    #Check that we have a ring with onzero intensity
+    assert ring>0
+def test_gaussian_psf_mathematical_behaviour():
+    """ 
+    Test for cheking that the Gaussian PSF drops by 1/e from its peak at a distance equal to the 
+    beam waist w0, validating the analytical form of the Gaussian function.
+    - Peak at 1.0 at the center (r = 0)
+    - Drop to approximately 1/e (~0.3679) at a radial distance r = w0
+    """
