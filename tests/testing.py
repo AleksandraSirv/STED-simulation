@@ -215,9 +215,9 @@ def test_gaussian_psf_peak_and_symmetry():
     right = psf[500, 600]
 
     #Check wether the peak is at the center
-    assert np.isclose(center,1.0), #Peak should be 1 at the center
+    assert np.isclose(center,1.0), "Peak should be 1 at the center"
     #Check symmetry
-    assert np.isclose(left,rigth, rtol=1e-3) #Should be symmetric in x
+    assert np.isclose(left,right, rtol=1e-3), "Should be symmetric in x"
 
 def test_laguerre_psf_peak():
     """ 
@@ -227,13 +227,13 @@ def test_laguerre_psf_peak():
     w = 100  # Beam waist in [nm]
     xy = np.linspace(-500, 500, 1001)
     x, y = np.meshgrid(xy, xy)
-    psf = gaussian_psf(x, y, w)
+    psf = laguerre_gaussian_donut(x, y, w)
 
     center = psf[500, 500]
     ring = psf[500, 400] #Has to be more than 0
 
     #Check wether the peak is 0
-    assert np.isclose(center,0, atol=1e-6), #Peak should be 0 at the center
+    assert np.isclose(center,0, atol=1e-6), "Peak should be 0 at the center"
     #Check that we have a ring with onzero intensity
     assert ring>0
     
@@ -252,5 +252,5 @@ def test_gaussian_psf_mathematical_behaviour():
     center_val = psf[0, 1]  # intensity at x=0
     edge_val = psf[0, 0]    # intensity at x=-w0
 
-    assert np.isclose(center_val,1.0,atol=1e-6), #Center should be 1
-    assert np.isclose(edge_val, 1/np.e, atol=1e-3), #At r=w0, intensity shoud be close to 1/e
+    assert np.isclose(center_val,1.0,atol=1e-6), "Center should be 1"
+    assert np.isclose(edge_val, 1/np.e, atol=1e-3), "At r=w0, intensity shoud be close to 1/e"
