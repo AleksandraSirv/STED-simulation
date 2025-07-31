@@ -236,6 +236,7 @@ def test_laguerre_psf_peak():
     assert np.isclose(center,0, atol=1e-6), #Peak should be 0 at the center
     #Check that we have a ring with onzero intensity
     assert ring>0
+    
 def test_gaussian_psf_mathematical_behaviour():
     """ 
     Test for cheking that the Gaussian PSF drops by 1/e from its peak at a distance equal to the 
@@ -243,3 +244,13 @@ def test_gaussian_psf_mathematical_behaviour():
     - Peak at 1.0 at the center (r = 0)
     - Drop to approximately 1/e (~0.3679) at a radial distance r = w0
     """
+    w0 = 100  # Beam waist in [nm]
+    #Creating a small grid centered around (0,0) going up to r=w0.
+    x = np.array([[-w0,0,w0]])
+    y = np.array([[0,0,0]])
+    psf = gaussian_psf(x, y, w0)
+    center_val = psf[0, 1]  # intensity at x=0
+    edge_val = psf[0, 0]    # intensity at x=-w0
+
+    assert np.isclose(center_val,1.0,atol=1e-6), #Center should be 1
+    assert np.isclose(edge_val, 1/np.e, atol=1e-3), #At r=w0, intensity shoud be close to 1/e
