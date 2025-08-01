@@ -254,3 +254,25 @@ def test_gaussian_psf_mathematical_behaviour():
 
     assert np.isclose(center_val,1.0,atol=1e-6), "Center should be 1"
     assert np.isclose(edge_val, 1/np.e, atol=1e-3), "At r=w0, intensity shoud be close to 1/e"
+
+def test_effective_psf():
+    """ 
+    Test for cheking that the effective PSF remains high at the centre (where STED intensity is 
+    zero) but is suppressed in the outer region where STED intensity is strongest.
+    """
+    w0 = 100  # Beam waist in [nm]
+    xy = np.linspace(-500, 500, 1001)
+    x, y = np.meshgrid(xy, xy)
+    
+    exc_psf = gaussian_psf(x, y, w0)
+    sted_psf = laguerre_gaussian_donut(x, y, w0)
+    eff_psf = effective_psf(exc_psf, sted_psf, I_s=1.0, I0_sted=1e4)
+    
+    center = (500, 500)
+    ring = (500, 400)  # ~100 nm from center
+    # Check that the center is mostly unaffected
+    assert np.isclose(eff_psf[center], exc_psf[center], atol=1e-3), \
+        "Center of PSF should remain mostly unaffected by STED"
+    # Check outer ring is suppressed
+    assert eff_psf[ring] < exc_psf[ring],\
+        "Outer region of effective PSF should be suppressed with high STED intensity"
