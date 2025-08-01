@@ -266,7 +266,7 @@ def test_effective_psf():
     
     exc_psf = gaussian_psf(x, y, w0)
     sted_psf = laguerre_gaussian_donut(x, y, w0)
-    eff_psf = effective_psf(exc_psf, sted_psf, I_s=1.0, I0_sted=1e4)
+    eff_psf = effective_psf(exc_psf, sted_psf, I_s=1.0, I0_sted=50)
     
     center = (500, 500)
     ring = (500, 400)  # ~100 nm from center
