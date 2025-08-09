@@ -105,4 +105,5 @@ else:
     # ------------------------------------------------------------------------
     plot_results(exc_psf, sted_donut, eff_psf, lambda_exc, lambda_sted, 
                  fwhm_exc, fwhm_eff, extent_nm)
+logging.shutdown()
 
