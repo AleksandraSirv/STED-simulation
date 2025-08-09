@@ -203,22 +203,35 @@ def test_fwhm_return():
 def test_gaussian_psf_peak_and_symmetry():
     """ 
     Test for cheking that the 2D Gaussian PSF peaks at the center and is symmetric across 
-    the x-axis.
-    """
+    the x-axis, and radial symmetry.
+    """    
     w0 = 100  # Beam waist in [nm]
     xy = np.linspace(-500, 500, 1001)
     x, y = np.meshgrid(xy, xy)
     psf = gaussian_psf(x, y, w0)
 
-    center = psf[500, 500]
-    left = psf[500, 400]
-    right = psf[500, 600]
+    center_idx = len(xy) // 2
+    center = psf[center_idx, center_idx]
+    left = psf[center_idx, center_idx - 100]
+    right = psf[center_idx, center_idx + 100]
 
-    #Check wether the peak is at the center
-    assert np.isclose(center,1.0), "Peak should be 1 at the center"
-    #Check symmetry
-    assert np.isclose(left,right, rtol=1e-3), "Should be symmetric in x"
-
+    # Peak at the center
+    assert np.isclose(center, 1.0), "Peak should be 1 at the center"
+    # Symmetry across x-axis
+    assert np.isclose(left, right, rtol=1e-3), "Should be symmetric in x"
+    # Symmetry across y-axis
+    up = psf[center_idx - 100, center_idx]
+    down = psf[center_idx + 100, center_idx]
+    assert np.isclose(up, down, rtol=1e-3), "Should be symmetric in y"
+    # Symmetry along main diagonal
+    diag1 = psf[center_idx - 70, center_idx - 70]
+    diag2 = psf[center_idx + 70, center_idx + 70]
+    assert np.isclose(diag1, diag2, rtol=1e-3), "Should be symmetric along main diagonal"
+    # Symmetry along anti-diagonal
+    anti1 = psf[center_idx - 70, center_idx + 70]
+    anti2 = psf[center_idx + 70, center_idx - 70]
+    assert np.isclose(anti1, anti2, rtol=1e-3), "Should be symmetric along anti-diagonal"
+    
 def test_laguerre_psf_peak():
     """ 
     Test for cheking that the Laguerre-Gaussian (donut) PSF has zero intensity at the center 
@@ -276,3 +289,4 @@ def test_effective_psf():
     # Check outer ring is suppressed
     assert eff_psf[ring] < exc_psf[ring],\
         "Outer region of effective PSF should be suppressed with high STED intensity"
+
