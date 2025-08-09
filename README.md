@@ -60,6 +60,10 @@ The project is divided into many parts:
   - Tests for valid and invalid parameter ranges (wavelengths, NA, intensities).  
   - Tests for return types and shapes of PSFs.  
   - Tests for correct computation of diffraction limit and FWHM.
+  - Tests for correct Gaussian PSF peak and symmetry
+  - Tests to verify that Laguerre-Gaussian has zero intensity in the ceter but nonzero intensity in the surrounding ring
+  - Tests for mathematical behaviour of Gaussian function
+  - Test for correct effective PSF behaviour
 
 - **_main.py_**  
   Main entry point of the simulation:  
@@ -117,9 +121,9 @@ Output files are saved automatically in the working directory as:
 
 - **_FWHM_comparison.png_**  displaying a FWHM comparison of the excitation and effective PSFs.
 
-Moreover, the estimated effective PSF resolution calculated using **_fwhm()_** is printed to the console for quantitative evaluation.
+Moreover, the estimated effective PSF resolution calculated using **_fwhm()_** is printed to the console and to the log.txt file in the Output folder for quantitative evaluation.
 
-**Note:** Running the simulation again will overwrite existing output images. To preserve previous results, rename or move them before re-running.  
+**Note:** Running the simulation again will overwrite existing output images or files. To preserve previous results, rename or move them before re-running.  
 
 ---
 ## Example Output
