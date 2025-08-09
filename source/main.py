@@ -9,21 +9,27 @@ from visual import plot_results
 #-----------------------------------------------------------------------------
 #SETTING UP LOGGING
 #-----------------------------------------------------------------------------
-try:  os.makedirs("Output")
-    except FileExistsError:
-    # directory already exists
-pass
+os.makedirs("Output", exist_ok=True)
+log_path = os.path.abspath("Output/log.txt")
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)] %(message)s",
-    handlers=[
-        logging.FileHandler("Output/log.txt"),
-        logging.StreamHandler()
-    ]
-)
-logger=logging.getLogger(__name__)
-logger.info("Information message")
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+if logger.hasHandlers():
+    logger.handlers.clear()
+    
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+
+file_handler = logging.FileHandler(log_path, mode='w')
+file_handler.setFormatter(formatter)
+
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
+logger.addHandler(stream_handler)
+
+logger.info(f"Logging started — writing to: {log_path}")
 #-----------------------------------------------------------------------------
 #INITIALIZATION OF PARAMETERS
 #-----------------------------------------------------------------------------
@@ -99,3 +105,4 @@ else:
     # ------------------------------------------------------------------------
     plot_results(exc_psf, sted_donut, eff_psf, lambda_exc, lambda_sted, 
                  fwhm_exc, fwhm_eff, extent_nm)
+
